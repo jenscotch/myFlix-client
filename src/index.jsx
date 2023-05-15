@@ -4,6 +4,7 @@ import { MainView } from "./components/main-view/main-view";
 //indicates that you need to bundle /index.scss
 import "./index.scss";
 
+
 //main component
 const MyFlixApplication = () => {
     return <MainView />;
