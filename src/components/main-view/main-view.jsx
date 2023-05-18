@@ -20,58 +20,45 @@ export const MainView = () => {
 
     const [selectedMovie, setSelectedMovie] = useState(null);
 
-
+const onMovieClick= (newSelectedMovie) => {
+    setSelectedMovie(newSelectedMovie);
+};
 useEffect(() => {
-    if (!token) {
-        return;
-    }
-
+    if (!token) return;
     fetch("https://jens-movie-api.herokuapp.com/movies", {
         headers: { Authorization: `Bearer ${token}` }
     })
     .then((response) => response.json())
-    .then((data) => {
-        const movies = data.docs.map((doc) => {
-            return {
-                id: doc.key,
-                title: doc.Title,
-                image: doc.Image,
-                director: doc.Director_Name?.[0]
-            };
-        });
-        setMovies(movies);
-    });
+    .then((data) => 
+        setMovies(data));
 }, [token]);
-
     return (
         <Row className="justify-content-md-center">
             {!user ? (
-                <>
-    <LoginView onLoggedIn={(user, token) => {
+    <Col md={5}>
+        <LoginView onLoggedIn={(user, token) => {
         setUser(user);
         setToken(token);
     }} />
     or
     <SignupView />
-    </>
+    </Col>
     ) : selectedMovie ? (
         <Col md={8}>
-        <MovieView
-            movie={selectedMovie}
-            onBackClick={() => setSelectedMovie(null)}
-        />
+            <MovieView
+                selectedMovie={selectedMovie}
+                onBackClick={() => setSelectedMovie(null)}
+    /> 
         </Col>
     ) : movies.length === 0 ? (
         <div>The list is empty!</div>
     ) : (
         <>
-            {movies.map((movie) => (
-                <Col className="mb-5" key={movie.id} md={3}>
+            {movies.map((movies) => (
+                <Col className="mb-5" key={movies._id} md={3}>
                 <MovieCard
-                    movie={movie}
-                    onBookClick={(newSelectedMovie) => {
-                        setSelectedMovie(newSelectedMovie);
-                    }}
+                    movies={movies}
+                    onMovieClick = {onMovieClick}
                 />
                 </Col>
             ))}

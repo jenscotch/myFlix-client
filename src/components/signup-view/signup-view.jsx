@@ -3,19 +3,19 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 export const SignupView = () => {
-    const [name, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [birthday, setBirthday] = useState("");
+    const [Name, setUsername] = useState("");
+    const [Password, setPassword] = useState("");
+    const [Email, setEmail] = useState("");
+    const [Birthday, setBirthday] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const data = {
-            Name: name,
-            Password: password,
-            Email: email,
-            Birthday: birthday
+            Name: Name,
+            Password: Password,
+            Email: Email,
+            Birthday: Birthday
         };
 
         fetch("https://jens-movie-api.herokuapp.com/users", {
@@ -40,7 +40,7 @@ export const SignupView = () => {
                 <Form.Label>Name:</Form.Label>
                 <Form.Control
                     type="text"
-                    value={name}
+                    value={Name}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     minLength="3"
@@ -51,7 +51,7 @@ export const SignupView = () => {
                 <Form.Label>Password:</Form.Label>
                 <Form.Control
                     type="password"
-                    value={password}
+                    value={Password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
@@ -61,7 +61,7 @@ export const SignupView = () => {
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
                     type="email"
-                    value={email}
+                    value={Email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
@@ -71,7 +71,7 @@ export const SignupView = () => {
                 <Form.Label>Birthday:</Form.Label>
                 <Form.Control
                     type="date"
-                    value={birthday}
+                    value={Birthday}
                     onChange={(e) => setBirthday(e.target.value)}
                     required
                 />

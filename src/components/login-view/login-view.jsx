@@ -3,14 +3,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 export const LoginView = ({ onLoggedIn }) => {
-    const [name, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [Name, setUsername] = useState("");
+    const [Password, setPassword] = useState("");
     const handleSubmit = (event) => {
         event.preventDefault();
 
         const data = {
-            access: name,
-            secret: password
+            Name: Name,
+            Password: Password
         };
 
         fetch("https://jens-movie-api.herokuapp.com/login", {
@@ -41,7 +41,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 <Form.Label>Name:</Form.Label>
                 <Form.Control
                     type="text"
-                    value={name}
+                    value={Name}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     minLength="3"
@@ -52,7 +52,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 <Form.Label>Password:</Form.Label>
                 <Form.Control
                     type="password"
-                    value={password}
+                    value={Password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />

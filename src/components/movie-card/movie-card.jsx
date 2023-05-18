@@ -3,26 +3,28 @@ import { Button, Card } from "react-bootstrap";
 
 
 
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movies, onMovieClick }) => {
     return (
         <Card className="h-100">
-            <Card.Img variant="top" src={movie.image} />
+            <Card.Img variant="top" src={movies.Image} />
             <Card.Body>
-                <Card.Title>{movie.title}</Card.Title>
-                <Card.Text>{movie.director}</Card.Text>
-                <Button onClick={() => onMovieClick(movie)} variant="link">
-                    Open
+                <Card.Title>{movies.Title}</Card.Title>
+                <Card.Body>{movies.Description}</Card.Body>
+                <Card.Footer>
+                    <Button onClick={() => onMovieClick(movies)} variant="link">
+                        Open
                 </Button>
+                </Card.Footer>
             </Card.Body>
         </Card>
     );
 };
 
 MovieCard.propTypes = {
-    movie: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
-        director: PropTypes.string
+    movies: PropTypes.shape({
+        Title: PropTypes.string.isRequired,
+        Description: PropTypes.string,
+        Image: PropTypes.string.isRequired,
     }).isRequired,
     onMovieClick: PropTypes.func.isRequired
 };
