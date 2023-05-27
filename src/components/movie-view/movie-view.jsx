@@ -1,32 +1,36 @@
-import Button from "react-bootstrap/Button";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import "./movie-view.scss";
 
-export const MovieView = ({ selectedMovie, onBackClick })  => {
+export const MovieView = ({ movies })  => {
+    const {movieId} = useParams();
+    const movie = movies.find((m) => m._id === movieId);
+   /* const similarMovies = movies.filter((m) => movie.Genre.Name === m.Genre.Name);
+
+    const addFavorite = () => {
+        fetch
+    } */
     return (
-        <div>
+        <div className="text-box group">
 
             <div>
-                <img src={selectedMovie.Image} />
+                <img className="image left" src={movie.Image} />
             </div>
             <div>
-                <span>Title: </span>
-                <span className="text">{selectedMovie.Title}</span>
+                <span className="heading">Title: </span>
+                <span className="text">{movie.Title}</span>
             </div>
             <div>
-                <span>Genre: </span>
-                <span className="text">{selectedMovie.Genre.Name}</span>
+                <span className="heading">Genre: </span>
+                <span className="text">{movie.Genre.Name}</span>
             </div>
             <div>
-                <span>Director: </span>
-                <span className="text">{selectedMovie.Director.Name}</span>
+                <span className="heading">Director: </span>
+                <span className="text">{movie.Director.Name}</span>
             </div>
-            <Button 
-                onClick={onBackClick}
-                className="back-button"
-                style={{ cursor: "pointer "}}
-            >
-                Back
-    </Button> 
+            <Link to={`/`}>
+                <button className="back-button">Back</button>
+            </Link> 
         </div>
     );
 };

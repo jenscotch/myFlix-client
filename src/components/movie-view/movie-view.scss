@@ -1,10 +1,61 @@
+*{
+    box-sizing: border-box;
+  }
+  .text-box {
+    max-width: 100%;
+    margin: 30px;
+    padding: 12px;
+    background:#00000095;
+    border-radius: 5px;
+  }
+
+  .image {
+    background:#0000009d;
+    max-height: 550px;
+    border-radius: 5px;
+    padding: 10px;
+    &.right{
+      float:right;
+      margin-left:20px;
+    }
+    &.left{
+      float:left;
+      margin-right:30px;
+    }
+  }
+  
+  //ClearFix
+  .group{
+    &:before,
+    &:after {
+      content: "";
+      display: table;
+    } 
+    &:after {
+      clear: both;
+    }
+  }
+
+.heading {
+    color: whitesmoke;
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.text {
+    color: whitesmoke;
+}
+
 .back-button {
     padding: 4px 12px 4px 12px;
     color: whitesmoke;
     background-color: dodgerblue;
     border: none;
     border-radius: 4px;
+    position: relative;
 }
-.text {
-    color: whitesmoke;
-}
+
+
+
+
+
