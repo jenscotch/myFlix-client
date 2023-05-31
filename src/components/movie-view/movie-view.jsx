@@ -28,7 +28,7 @@ export const MovieView = ({ movies })  => {
                 <span className="heading">Director: </span>
                 <span className="text">{movie.Director.Name}</span>
             </div>
-            <Link to={`/`}>
+            <Link to={`/movies`}>
                 <button className="back-button">Back</button>
             </Link> 
         </div>

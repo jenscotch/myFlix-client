@@ -1,17 +1,17 @@
-import React from "react";
+/* import React from "react";
 import { Link } from "react-router-dom";   
 import { Col } from "react-bootstrap";
    
 
 export function FavoriteMovies( favoriteMovieList ) {    
-    favoriteMovieList = movie.filter(m => user.favoriteMovieList.includes(m._id));
+    const movie = movie.filter(m => user.favoriteMovieList.includes(m._id));
     return (   
         <> 
             <Col md={12}>
                 <h2>My Favorite Movies</h2>
             </Col>
                 {favoriteMovieList.map(movie => (
-                    <Col className="mb-4" key={movie._id} xl={2} lg={3} md={4} xs={6}>
+                    <Col className="mb-4" key={favoriteMovieList._id} xl={2} lg={3} md={4} xs={6}>
                         <MovieCard movie={movie} />
                     </Col>
 
@@ -27,4 +27,4 @@ export function FavoriteMovies( favoriteMovieList ) {
         ))}
         </>
     );
-}
+} 

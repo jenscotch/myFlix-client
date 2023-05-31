@@ -9,6 +9,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";  
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+import "./main-view.scss";
+
 export const MainView = () => {
 
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -42,6 +44,12 @@ useEffect(() => {
         />
         <Row className="justify-content-md-center">
             <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <></>
+                    }
+                />
                 <Route 
                     path="/signup"
                     element={
@@ -82,12 +90,9 @@ useEffect(() => {
                             ) : (
                                     <ProfileView
                                         user={user}
-                                        token={token}
-                                        favoriteMovieList={MovieCard}
-                                        onLoggedOut={() => {
-                                            setUser(null);
-                                            setToken(null);
-                                        }}
+                                        movies={movies}
+                                  
+                                      
                                     />
                             )}
                         </>
@@ -105,6 +110,7 @@ useEffect(() => {
                             <Col md={8}>
                                 <MovieView
                                     movies={movies}
+                        
                                 /> 
                             </Col>
                         )}
@@ -112,7 +118,7 @@ useEffect(() => {
                     }
                 />
                 <Route 
-                    path="/"
+                    path="/movies"
                     element={
                         <>
                         {!user ? (
@@ -125,6 +131,8 @@ useEffect(() => {
                                 <Col className="mb-5" key={movie._id} md={3}>
                                 <MovieCard
                                     movie={movie}
+                                    user={user}
+                                    
                                 />
                                 </Col>
                             ))}
