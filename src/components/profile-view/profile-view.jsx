@@ -1,27 +1,3 @@
-/* import React from "react";
-import { Row, Col } from "react-bootstrap";
-import { MovieCard } from "../movie-card/movie-card";
-import { UserInfo } from "../profile-view/user-info";
-import { FavoriteMovies } from "../profile-view/favorite-movies";
-import { UpdateUser } from "../profile-view/update-user";
-
-export const ProfileView = ({ onProfileUpdate, onLoggedOut, movie, user, token }) => {
-    return (
-        <div>
-        <UserInfo name={user.Name} email={user.Email} birthday={user.Birthday} />
-       {/* <FavoriteMovies favoriteMovieList={favoriteMovieList}/> 
-        <UpdateUser onProfileUpdate={onProfileUpdate} onLoggedIn={onLoggedIn} />   
-            
-        <Row>
-            <FavoriteMovies favoriteMovieList={user.favoriteMovieList} />
-                <Col xs={12} md={6} lg={4} xl={3} xxl={2} key={movie._id}>
-                    <MovieCard movie={movie} user={user} token={token} />
-                </Col>
-        </Row>
-        </div>
-    )
-} */
-
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -32,20 +8,20 @@ export const ProfileView = ({
     movies,
     setUser,
     onLoggedOut,
-    onProfileUpdate,
+    updateUserFavorites,
+    
 }) => {
     const [ name, setName ] = useState(user.Name);
     const [ password, setPassword ] = useState('');
     const [ email, setEmail ] = useState(user.email);
-    const [ birthday, setBirthday ] = useState(new Date(user.Birthday).toISOString().split('T')[0]);
-
+    const [ birthday, setBirthday ] = useState("");
     const [favorites, setFavorites] = useState([]);
     const navigate = useNavigate();
     const [showButton, setShowButton] = useState(false);
     const [hoverEnabled, setHoverEnabled] = useState(false);
 
     const getFavoriteMovies = () => {
-        if (!user || !user.favorites || user.favorites.length === 0) {
+        if (!user || !user.movies || user.movies.length === 0) {
             setFavorites([]);
                 return;
     }
@@ -76,7 +52,7 @@ useEffect(() => {
 
 const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(`/users/${user.Name}`, {
+    fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -92,6 +68,7 @@ const handleUpdate = (e) => {
         .then((res) => res.json())
         .then((data) => {
             alert('Profile has been updated.');
+           
             setUser(data);
         })
         .catch((e) => console.log(e));
@@ -106,7 +83,7 @@ const handleDelete = () => {
         return;
     }
 
-    fetch(`/users/${user.Name}`, {
+    fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
         method: 'DELETE',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -125,37 +102,39 @@ const handleDelete = () => {
     };
 
     const handleAddFavorites = (movieId) => {
-        fetch(`/users/${user.Name}/movies/${movieId}`,
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/`,
         {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
-            .then((response) => response.JSON())
-            .then((data) => {
+            .then((res) => res.json())
+            .then((user) => {
                 alert('Added to favorites');
-                setFavorites([...favorites, data.movie]);
-                setUser({...user, favorites: [...user.favorites, movieId] });
+                localStorage.setItem('user', JSON.stringify(result));
+                window.location.reload();
+                setFavorites([...favorites, user.favorites]);
+                setUser({...user, Movies: [...user.favorites, movieId] });
             })
             .catch((error) => console.log(error));
     };
 
     const handleRemoveFavorites = (movieId) => {
-        fetch(`/users/${user.Name}/movies/${movieId}`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
-            .then((response) => response.JSON())
-            .then((data) => {
-                const updatedFavorites = favorites.filter((favorite) => favorite._id !== data._id);
+            .then((res) => res.json())
+            .then((movie) => {
+                const updatedFavorites = favorites.filter((favorite) => favorite._id !== movie._id);
                 setFavorites(updatedFavorites);
                 updateUserFavorites(movieId, 'remove');
             })
             .catch((error) => console.log(error));
-    };
+    }; 
 
     return(
         <Container
@@ -214,7 +193,7 @@ const handleDelete = () => {
                                     margin: '5px',
                                 }}
                             >
-                                <MovieCard key={movie._id} movie={movie} user={user} updateUser={updateUser} />
+                               {/* <MovieCard key={movie._id} movie={movie} user={user} updateUser={updateUser} /> */}
                                 <div
                                     style={{
                                         position: 'relative',
@@ -235,6 +214,13 @@ const handleDelete = () => {
                                         }
                                     }}
                                 >
+                                    <MovieCard
+                                        key={movie._id}
+                                        movie={movie}
+                                        user={user}
+                                        onAddFavorites={(movieId) =>
+                                            handleAddFavorites(movieId)}
+                                    />
                                     <Button variant="danger"
                                         syle={{
                                             position: 'absolute',
@@ -276,11 +262,11 @@ const handleDelete = () => {
                 >
                     <Form.Label>Name:</Form.Label>
                     <Form.Control
+                        className="text-light"
                         type="text"
                         placeholder="Enter name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        required
                     />
                 </Form.Group>
 
@@ -290,11 +276,11 @@ const handleDelete = () => {
                 >
                     <Form.Label>Password:</Form.Label>
                     <Form.Control
+                        className="text-light"
                         type="password"
                         placeholder="Enter new password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        required
                     />
                 </Form.Group>
 
@@ -304,11 +290,11 @@ const handleDelete = () => {
                 >
                     <Form.Label>Email:</Form.Label>
                     <Form.Control
+                        className="text-light"
                         type="email"
                         placeholder="Enter new email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </Form.Group>
 
@@ -318,6 +304,7 @@ const handleDelete = () => {
                 >
                     <Form.Label>Birthday:</Form.Label>
                     <Form.Control
+                        className="text-light"
                         type="date"
                         value={birthday}
                         onChange={(e) => setBirthday(e.target.value)}
@@ -333,8 +320,6 @@ const handleDelete = () => {
                     }}
                     onClick={handleUpdate}
                 >Update</Button>
-                <br></br>
-                <br></br>
                 <Button variant="danger" type="button" onClick={handleDelete}>
                     Delete Account
                 </Button>

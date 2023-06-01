@@ -1,5 +1,5 @@
 import{ useState } from "react";
-import Button from "react-bootstrap/Button";
+import { Button, Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 export const SignupView = () => {
@@ -35,10 +35,15 @@ export const SignupView = () => {
     };
 
     return (
+        <Container>
+            <h1 className="text-center" style={{ textDecoration: 'bold', color: "white" }}>
+                Signup
+            </h1>
         <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formUsername">
-                <Form.Label>Name:</Form.Label>
+                <Form.Label style={{color: "white"}}>Name:</Form.Label>
                 <Form.Control
+                    className="text-light"
                     type="text"
                     value={Name}
                     onChange={(e) => setUsername(e.target.value)}
@@ -48,8 +53,9 @@ export const SignupView = () => {
             </Form.Group>
 
             <Form.Group controlId="formPassword">
-                <Form.Label>Password:</Form.Label>
+                <Form.Label style={{color: "white"}}>Password:</Form.Label>
                 <Form.Control
+                    className="text-light"
                     type="password"
                     value={Password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -58,8 +64,9 @@ export const SignupView = () => {
             </Form.Group>
         
             <Form.Group controlId="formEmail">
-                <Form.Label>Email:</Form.Label>
+                <Form.Label style={{color: "white"}}>Email:</Form.Label>
                 <Form.Control
+                    className="text-light"
                     type="email"
                     value={Email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -68,8 +75,9 @@ export const SignupView = () => {
             </Form.Group>
 
             <Form.Group controlId="formBirthday">
-                <Form.Label>Birthday:</Form.Label>
+                <Form.Label style={{color: "white"}}>Birthday:</Form.Label>
                 <Form.Control
+                    className="text-light"
                     type="date"
                     value={Birthday}
                     onChange={(e) => setBirthday(e.target.value)}
@@ -78,5 +86,6 @@ export const SignupView = () => {
             </Form.Group>
             <Button variant="primary" type="submit">Submit</Button>
         </Form>
+        </Container>
     );
 };

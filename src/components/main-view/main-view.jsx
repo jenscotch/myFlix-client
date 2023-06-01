@@ -5,6 +5,7 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
+import { HomeView } from "../home-view/home-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";  
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -23,6 +24,29 @@ export const MainView = () => {
 
     const [movies, setMovies] = useState([]);
 
+    const sort = movies.sort((a, b) => {
+        return a.Title > b.Title;
+    });
+
+    const onLoggedOut = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.clear();
+    };
+
+    const updateUserFavorites = (movieId, action) => {
+        if (action === "add") {
+            setUser({ ...user, favorites: [...user.favorites, movieId] });
+        } else if (action === "remove") {
+            setUser({
+                ...user,
+                favorites: user.favorites.filter((_id) => {
+                    return _id !== movieId;
+                }),
+            });
+        }
+    };
+
     
 
 useEffect(() => {
@@ -30,9 +54,9 @@ useEffect(() => {
     fetch("https://jens-movie-api.herokuapp.com/movies", {
         headers: { Authorization: `Bearer ${token}` }
     })
-    .then((response) => response.json())
-    .then((data) => 
-        setMovies(data));
+    .then((res) => res.json())
+    .then((movies) => 
+        setMovies(movies));
 }, [token]);
     return (
         <BrowserRouter>
@@ -47,7 +71,7 @@ useEffect(() => {
                 <Route
                     path="/"
                     element={
-                        <></>
+                        <HomeView />
                     }
                 />
                 <Route 
@@ -91,8 +115,8 @@ useEffect(() => {
                                     <ProfileView
                                         user={user}
                                         movies={movies}
-                                  
-                                      
+                                        onLoggedOut={onLoggedOut}
+                                        updateUserFavorites={updateUserFavorites}
                                     />
                             )}
                         </>
@@ -132,7 +156,7 @@ useEffect(() => {
                                 <MovieCard
                                     movie={movie}
                                     user={user}
-                                    
+                                    updateUserFavorites={updateUserFavorites}
                                 />
                                 </Col>
                             ))}

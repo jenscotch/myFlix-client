@@ -5,11 +5,7 @@ import "./movie-view.scss";
 export const MovieView = ({ movies })  => {
     const {movieId} = useParams();
     const movie = movies.find((m) => m._id === movieId);
-   /* const similarMovies = movies.filter((m) => movie.Genre.Name === m.Genre.Name);
-
-    const addFavorite = () => {
-        fetch
-    } */
+  
     return (
         <div className="text-box group">
 

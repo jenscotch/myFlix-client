@@ -1,11 +1,12 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./navigation-bar.scss";
 
 export const NavigationBar = ({ user, onLoggedOut }) => {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar className="nav-color" variant="dark" expand="lg">
             <Container>
-                <Navbar.Brand as={Link} to="/">
+                <Navbar.Brand as={Link} to="/" className="logo">
                     Jen's Flix
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -24,7 +25,7 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
                         {user && (
                             <>
                             <Nav.Link as={Link} to="/movies">
-                                Home
+                                Movies
                             </Nav.Link>
                             <Nav.Link as={Link} to="/profile">
                                 Profile

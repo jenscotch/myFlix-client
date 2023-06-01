@@ -22,9 +22,9 @@ export function FavoriteMovies( favoriteMovieList ) {
                                 <h4>movies.Title</h4>
                             </Link>
                             <button variant="secondary" onClick={() => removeFav(movies._id)}>Remove from Favorites</button>
-                   </div> */
+                   </div> 
                     
         ))}
         </>
     );
-} 
+} */
