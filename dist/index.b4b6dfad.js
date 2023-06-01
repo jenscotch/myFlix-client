@@ -27326,14 +27326,14 @@ const MainView = ()=>{
     const updateUserFavorites = (movieId, action)=>{
         if (action === "add") setUser({
             ...user,
-            favorites: [
-                ...user.favorites,
+            Movies: [
+                ...user.Movies,
                 movieId
             ]
         });
         else if (action === "remove") setUser({
             ...user,
-            favorites: user.favorites.filter((_id)=>{
+            Movies: user.Movies.filter((_id)=>{
                 return _id !== movieId;
             })
         });
@@ -27416,6 +27416,7 @@ const MainView = ()=>{
                                 }, void 0, false, void 0, void 0) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _profileView.ProfileView), {
                                     user: user,
                                     movies: movies,
+                                    setUser: setUser,
                                     onLoggedOut: onLoggedOut,
                                     updateUserFavorites: updateUserFavorites
                                 }, void 0, false, void 0, void 0)
@@ -27442,7 +27443,7 @@ const MainView = ()=>{
                             }, void 0, false)
                         }, void 0, false, {
                             fileName: "src/components/main-view/main-view.jsx",
-                            lineNumber: 125,
+                            lineNumber: 126,
                             columnNumber: 17
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -27460,6 +27461,7 @@ const MainView = ()=>{
                                             children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
                                                 movie: movie,
                                                 user: user,
+                                                setUser: setUser,
                                                 updateUserFavorites: updateUserFavorites
                                             }, void 0, false, void 0, void 0)
                                         }, movie._id, false, void 0, void 0))
@@ -27467,7 +27469,7 @@ const MainView = ()=>{
                             }, void 0, false)
                         }, void 0, false, {
                             fileName: "src/components/main-view/main-view.jsx",
-                            lineNumber: 144,
+                            lineNumber: 145,
                             columnNumber: 17
                         }, undefined)
                     ]
@@ -27526,12 +27528,12 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
         navigate(`/movies/${encodeURIComponent(movie._id)}`);
     };
     (0, _react.useEffect)(()=>{
-        if (user.favorites && movie._id) setIsFavorite(user.favorites.includes(movie._id));
+        if (user.Movies && movie._id) setIsFavorite(user.Movies.includes(movie._id));
     }, [
         movieId
     ]);
     const handleAddFavorites = ()=>{
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -27541,8 +27543,9 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
         }).then((user)=>{
             alert("You added a new movie to your list.");
             updateUserFavorites(movieId, "add");
-            localStorage.setItem(user.favorites, JSON.stringify(movie));
+            localStorage.setItem(user.Movies, JSON.stringify(movie));
             setIsFavorite(true);
+            setUser(user);
             window.location.reload();
         }).catch((error)=>console.log(error));
     };
@@ -27557,7 +27560,7 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                 src: movie.Image
             }, void 0, false, {
                 fileName: "src/components/movie-card/movie-card.jsx",
-                lineNumber: 50,
+                lineNumber: 51,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Body, {
@@ -27567,7 +27570,7 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                         children: movie.Title
                     }, void 0, false, {
                         fileName: "src/components/movie-card/movie-card.jsx",
-                        lineNumber: 52,
+                        lineNumber: 53,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Body, {
@@ -27575,7 +27578,7 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                         children: movie.Year
                     }, void 0, false, {
                         fileName: "src/components/movie-card/movie-card.jsx",
-                        lineNumber: 53,
+                        lineNumber: 54,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Body, {
@@ -27583,7 +27586,7 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                         children: movie.Description
                     }, void 0, false, {
                         fileName: "src/components/movie-card/movie-card.jsx",
-                        lineNumber: 54,
+                        lineNumber: 55,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Card).Footer, {
@@ -27595,7 +27598,7 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                                 children: "Open"
                             }, void 0, false, {
                                 fileName: "src/components/movie-card/movie-card.jsx",
-                                lineNumber: 56,
+                                lineNumber: 57,
                                 columnNumber: 17
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -27605,25 +27608,25 @@ const MovieCard = ({ movie , user , setUser , updateUserFavorites  })=>{
                                 children: "Add"
                             }, void 0, false, {
                                 fileName: "src/components/movie-card/movie-card.jsx",
-                                lineNumber: 61,
+                                lineNumber: 62,
                                 columnNumber: 17
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/components/movie-card/movie-card.jsx",
-                        lineNumber: 55,
+                        lineNumber: 56,
                         columnNumber: 17
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/components/movie-card/movie-card.jsx",
-                lineNumber: 51,
+                lineNumber: 52,
                 columnNumber: 13
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/movie-card/movie-card.jsx",
-        lineNumber: 49,
+        lineNumber: 50,
         columnNumber: 9
     }, undefined);
 };
@@ -47100,11 +47103,11 @@ const ProfileView = ({ user , movies , setUser , onLoggedOut , updateUserFavorit
     const [showButton, setShowButton] = (0, _react.useState)(false);
     const [hoverEnabled, setHoverEnabled] = (0, _react.useState)(false);
     const getFavoriteMovies = ()=>{
-        if (!user || !user.movies || user.movies.length === 0) {
+        if (!user || !user.Movies || user.Movies.length === 0) {
             setFavorites([]);
             return;
         }
-        const favoriteMovies = movies.filter((movie1)=>user.favorites.includes(movie1._id));
+        const favoriteMovies = movies.filter((movie1)=>user.Movies.includes(movie1._id));
         setFavorites(favoriteMovies);
     };
     (0, _react.useEffect)(()=>{
@@ -47161,7 +47164,7 @@ const ProfileView = ({ user , movies , setUser , onLoggedOut , updateUserFavorit
         }).catch((e)=>console.log(e));
     };
     const handleAddFavorites = (movieId)=>{
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -47172,19 +47175,19 @@ const ProfileView = ({ user , movies , setUser , onLoggedOut , updateUserFavorit
             window.location.reload();
             setFavorites([
                 ...favorites,
-                user.favorites
+                user.Movies
             ]);
             setUser({
                 ...user,
                 Movies: [
-                    ...user.favorites,
+                    ...user.Movies,
                     movieId
                 ]
             });
         }).catch((error)=>console.log(error));
     };
     const handleRemoveFavorites = (movieId)=>{
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movie._id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`

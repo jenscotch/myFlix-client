@@ -36,11 +36,11 @@ export const MainView = () => {
 
     const updateUserFavorites = (movieId, action) => {
         if (action === "add") {
-            setUser({ ...user, favorites: [...user.favorites, movieId] });
+            setUser({ ...user, Movies: [...user.Movies, movieId] });
         } else if (action === "remove") {
             setUser({
                 ...user,
-                favorites: user.favorites.filter((_id) => {
+                Movies: user.Movies.filter((_id) => {
                     return _id !== movieId;
                 }),
             });
@@ -115,6 +115,7 @@ useEffect(() => {
                                     <ProfileView
                                         user={user}
                                         movies={movies}
+                                        setUser={setUser}
                                         onLoggedOut={onLoggedOut}
                                         updateUserFavorites={updateUserFavorites}
                                     />
@@ -156,6 +157,7 @@ useEffect(() => {
                                 <MovieCard
                                     movie={movie}
                                     user={user}
+                                    setUser={setUser}
                                     updateUserFavorites={updateUserFavorites}
                                 />
                                 </Col>

@@ -14,14 +14,14 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
     };
 
     useEffect(() => {
-        if (user.favorites && movie._id) {
-          setIsFavorite(user.favorites.includes(movie._id))
+        if (user.Movies && movie._id) {
+          setIsFavorite(user.Movies.includes(movie._id))
         }
       }, [movieId]);
     
 
     const handleAddFavorites = () => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`,
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`,
         {
             method: "POST",
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}`},
@@ -32,8 +32,9 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
         .then((user) => {
             alert("You added a new movie to your list.");
             updateUserFavorites(movieId, "add");
-            localStorage.setItem(user.favorites, JSON.stringify(movie));
+            localStorage.setItem(user.Movies, JSON.stringify(movie));
             setIsFavorite(true);
+            setUser(user);
             window.location.reload();
     })
         

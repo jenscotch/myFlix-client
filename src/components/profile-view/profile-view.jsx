@@ -21,12 +21,12 @@ export const ProfileView = ({
     const [hoverEnabled, setHoverEnabled] = useState(false);
 
     const getFavoriteMovies = () => {
-        if (!user || !user.movies || user.movies.length === 0) {
+        if (!user || !user.Movies || user.Movies.length === 0) {
             setFavorites([]);
                 return;
     }
 
-    const favoriteMovies = movies.filter((movie) => user.favorites.includes(movie._id));
+    const favoriteMovies = movies.filter((movie) => user.Movies.includes(movie._id));
 
 setFavorites(favoriteMovies);
 };
@@ -102,7 +102,7 @@ const handleDelete = () => {
     };
 
     const handleAddFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/`,
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`,
         {
             method: 'POST',
             headers: {
@@ -114,14 +114,14 @@ const handleDelete = () => {
                 alert('Added to favorites');
                 localStorage.setItem('user', JSON.stringify(result));
                 window.location.reload();
-                setFavorites([...favorites, user.favorites]);
-                setUser({...user, Movies: [...user.favorites, movieId] });
+                setFavorites([...favorites, user.Movies]);
+                setUser({...user, Movies: [...user.Movies, movieId] });
             })
             .catch((error) => console.log(error));
     };
 
     const handleRemoveFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movie._id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
