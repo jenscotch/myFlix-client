@@ -102,7 +102,7 @@ const handleDelete = () => {
     };
 
     const handleAddFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`,
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movieId}`,
         {
             method: 'POST',
             headers: {
@@ -121,7 +121,7 @@ const handleDelete = () => {
     };
 
     const handleRemoveFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movie._id}`, {
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movieId}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

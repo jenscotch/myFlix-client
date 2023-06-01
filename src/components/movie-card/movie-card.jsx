@@ -21,7 +21,7 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
     
 
     const handleAddFavorites = () => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`,
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movie._id}`,
         {
             method: "POST",
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}`},
@@ -52,7 +52,6 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
             <Card.Body>
                 <Card.Title className="header-text">{movie.Title}</Card.Title>
                 <Card.Body className="header-text">{movie.Year}</Card.Body>
-                <Card.Body className="text">{movie.Description}</Card.Body>
                 <Card.Footer>
                 <Button
                     className="w-100"

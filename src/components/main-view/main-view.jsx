@@ -135,7 +135,6 @@ useEffect(() => {
                             <Col md={8}>
                                 <MovieView
                                     movies={movies}
-                        
                                 /> 
                             </Col>
                         )}
