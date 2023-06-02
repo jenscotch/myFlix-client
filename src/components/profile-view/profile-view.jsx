@@ -21,12 +21,12 @@ export const ProfileView = ({
     const [hoverEnabled, setHoverEnabled] = useState(false);
 
     const getFavoriteMovies = () => {
-        if (!user || !user.Movies || user.Movies.length === 0) {
+        if (!user || !user.movies || user.movies.length === 0) {
             setFavorites([]);
                 return;
     }
 
-    const favoriteMovies = movies.filter((movie) => user.Movies.includes(movie._id));
+    const favoriteMovies = movies.filter((movie) => user.movies.includes(movie._id));
 
 setFavorites(favoriteMovies);
 };
@@ -114,8 +114,8 @@ const handleDelete = () => {
                 alert('Added to favorites');
                 localStorage.setItem('user', JSON.stringify(result));
                 window.location.reload();
-                setFavorites([...favorites, user.Movies]);
-                setUser({...user, Movies: [...user.Movies, movieId] });
+                setFavorites([...favorites, user.movies]);
+                setUser({...user, movie: [...user.movie, movieId] });
             })
             .catch((error) => console.log(error));
     };

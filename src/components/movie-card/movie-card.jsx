@@ -14,8 +14,8 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
     };
 
     useEffect(() => {
-        if (user.Movies && movie._id) {
-          setIsFavorite(user.Movies.includes(movie._id))
+        if (user.movie && movie._id) {
+          setIsFavorite(user.movie.includes(movie._id))
         }
       }, [movieId]);
     
@@ -32,7 +32,7 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
         .then((user) => {
             alert("You added a new movie to your list.");
             updateUserFavorites(movieId, "add");
-            localStorage.setItem(user.Movies, JSON.stringify(movie));
+            //localStorage.setItem("user_movie", JSON.stringify(movie));
             setIsFavorite(true);
             setUser(user);
             window.location.reload();

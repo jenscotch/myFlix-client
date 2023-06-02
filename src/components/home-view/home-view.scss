@@ -59,6 +59,18 @@ animation: flicker 2s infinite alternate;
   outline: none;
 }
 
+.p {
+  color: #95deff;
+  font-style: italic;
+  font-size: 12pt;
+}
+
+.p2 {
+  color: #95deff;
+  font-style: italic;
+  font-size: 10pt;
+}
+
 /* Animate neon flicker */
 @keyframes flicker {
     

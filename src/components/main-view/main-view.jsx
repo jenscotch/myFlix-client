@@ -34,13 +34,18 @@ export const MainView = () => {
         localStorage.clear();
     };
 
+    // Verify that you are sending a request to your API to update the user
     const updateUserFavorites = (movieId, action) => {
+        console.log(movies);
+        console.log(user);
         if (action === "add") {
-            setUser({ ...user, Movies: [...user.Movies, movieId] });
+            setUser({ 
+                ...user, 
+                movie: [...user.Movies, movieId] });
         } else if (action === "remove") {
             setUser({
                 ...user,
-                Movies: user.Movies.filter((_id) => {
+                movie: movies.filter((_id) => {
                     return _id !== movieId;
                 }),
             });
