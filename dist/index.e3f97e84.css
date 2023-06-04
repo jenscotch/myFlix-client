@@ -12076,7 +12076,7 @@ textarea.form-control-lg {
   background-color: #7500376d;
 }
 
-.logo {
+.nav-logo {
   color: #fa1593;
   min-height: 1vh;
   justify-content: center;
@@ -12109,7 +12109,7 @@ textarea.form-control-lg {
   border: .1rem solid #fff;
 }
 
-.h1 {
+.neon {
   color: #fff;
   min-height: 10vh;
   border: .4rem solid #fff;
