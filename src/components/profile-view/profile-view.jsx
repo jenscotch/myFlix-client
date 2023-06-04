@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Col, Row } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { MovieCard } from "../movie-card/movie-card";
+import { Container, Form, Button, Col, Row, Card } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ProfileView = ({
     user,
@@ -11,24 +10,32 @@ export const ProfileView = ({
     updateUserFavorites,
     
 }) => {
-    const [ name, setName ] = useState(user.Name);
-    const [ password, setPassword ] = useState('');
-    const [ email, setEmail ] = useState(user.email);
-    const [ birthday, setBirthday ] = useState("");
-    const [favorites, setFavorites] = useState([]);
+    const [ Name, setName ] = useState(user.Name);
+    const [ Password, setPassword ] = useState('');
+    const [ Email, setEmail ] = useState(user.email);
+    const [ Birthday, setBirthday ] = useState('');
+    const [Movies, setFavorites] = useState([{}]);
     const navigate = useNavigate();
     const [showButton, setShowButton] = useState(false);
     const [hoverEnabled, setHoverEnabled] = useState(false);
+    const { movieId } = useParams();
+    
 
     const getFavoriteMovies = () => {
-        if (!user || !user.movies || user.movies.length === 0) {
-            setFavorites([]);
-                return;
-    }
-
-    const favoriteMovies = movies.filter((movie) => user.movies.includes(movie._id));
-
-setFavorites(favoriteMovies);
+        console.log(user);
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+})
+        .then((res) => res.json())
+        .then((data) => {
+            const Movies = movies.filter((movie) => data.Movies.includes(movie._id));
+            setFavorites(Movies);
+    })
+        .catch((e) => console.log(e));
 };
 
 useEffect(() => {
@@ -52,17 +59,17 @@ useEffect(() => {
 
 const handleUpdate = (e) => {
     e.preventDefault();
-    fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
+    fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            name: name,
-            password: password,
-            email: email,
-            birthday: birthday,
+            Name: Name,
+            Password: Password,
+            Email: Email,
+            Birthday: Birthday,
         }),
     })
         .then((res) => res.json())
@@ -83,7 +90,7 @@ const handleDelete = () => {
         return;
     }
 
-    fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}`, {
+    fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
         method: 'DELETE',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -101,37 +108,27 @@ const handleDelete = () => {
         .catch((e) => console.log(e));
     };
 
-    const handleAddFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movieId}`,
-        {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((user) => {
-                alert('Added to favorites');
-                localStorage.setItem('user', JSON.stringify(result));
-                window.location.reload();
-                setFavorites([...favorites, user.movies]);
-                setUser({...user, movie: [...user.movie, movieId] });
-            })
-            .catch((error) => console.log(error));
-    };
+  
 
-    const handleRemoveFavorites = (movieId) => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movieId}`, {
+    const handleRemoveFavorites = (event) => {
+        event.preventDefault();
+
+
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         })
-            .then((res) => res.json())
-            .then((movie) => {
-                const updatedFavorites = favorites.filter((favorite) => favorite._id !== movie._id);
-                setFavorites(updatedFavorites);
+            .then((res) => {
+                if(res.ok) {
+                    res.json(); }})
+            .then((data) => {
+                alert("You removed a movie from your list.");
+                setFavorites(false);
                 updateUserFavorites(movieId, 'remove');
+                setUser(data);
+                window.location.reload();
             })
             .catch((error) => console.log(error));
     }; 
@@ -179,11 +176,11 @@ const handleDelete = () => {
                     flexWrap: 'wrap',
                 }}
             >
-                {favorites.length > 0 ? (
-                    favorites
+                {Movies.length > 0 ? (
+                    Movies
                         .filter((movie) => movie !== null)
                         .map((movie) => (
-                            <Col key={movie._id}
+                            <Col key={movie}
                                 xs={3} sm={3} md={3} lg={3}
                                 className="d-flex justify-content-center mb-4"
                                 style={{
@@ -193,7 +190,6 @@ const handleDelete = () => {
                                     margin: '5px',
                                 }}
                             >
-                               {/* <MovieCard key={movie._id} movie={movie} user={user} updateUser={updateUser} /> */}
                                 <div
                                     style={{
                                         position: 'relative',
@@ -214,13 +210,16 @@ const handleDelete = () => {
                                         }
                                     }}
                                 >
-                                    <MovieCard
-                                        key={movie._id}
-                                        movie={movie}
-                                        user={user}
-                                        onAddFavorites={(movieId) =>
-                                            handleAddFavorites(movieId)}
-                                    />
+                                    
+                                    <div>
+                                        <Card className="movie-card card-wrap h-100 text-center">
+                                            <Card.Img className="img-fluid card-img-top" variant="top" src={movie.Image} />
+                                        <Card.Body>
+                                            <Card.Title className="header-text">{movie.Title}</Card.Title>
+                                        <Card.Body className="header-text">{movie.Year}</Card.Body>
+                                        </Card.Body>
+                                        </Card>
+                                    </div>
                                     <Button variant="danger"
                                         syle={{
                                             position: 'absolute',
@@ -235,7 +234,7 @@ const handleDelete = () => {
                                             opacity: hoverEnabled && showButton ? 1 : 0,
                                             zIndex: 1,
                                         }}
-                                        onClick={() => handleRemoveFavorites(movie._id)}
+                                        onClick={handleRemoveFavorites}
                                     >
                                         Remove
                                     </Button>
@@ -265,7 +264,7 @@ const handleDelete = () => {
                         className="text-light"
                         type="text"
                         placeholder="Enter name"
-                        value={name}
+                        value={Name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
@@ -279,7 +278,7 @@ const handleDelete = () => {
                         className="text-light"
                         type="password"
                         placeholder="Enter new password"
-                        value={password}
+                        value={Password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Group>
@@ -293,7 +292,7 @@ const handleDelete = () => {
                         className="text-light"
                         type="email"
                         placeholder="Enter new email"
-                        value={email}
+                        value={Email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </Form.Group>
@@ -306,7 +305,7 @@ const handleDelete = () => {
                     <Form.Control
                         className="text-light"
                         type="date"
-                        value={birthday}
+                        value={Birthday}
                         onChange={(e) => setBirthday(e.target.value)}
                     />
                 </Form.Group>

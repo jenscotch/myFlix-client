@@ -8,20 +8,18 @@ import "./movie-card.scss";
 export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
     const navigate = useNavigate();
     const { movieId } = useParams();
-    const [isFavorite, setIsFavorite] = useState(false);
-    const handleClick = () => {
-        navigate(`/movies/${encodeURIComponent(movie._id)}`);
-    };
-
-    useEffect(() => {
-        if (user.movie && movie._id) {
-          setIsFavorite(user.movie.includes(movie._id))
-        }
-      }, [movieId]);
+    const [Movies, setMovies] = useState(null);
+    const [isFavorite, setIsFavorite] = useState([{}]);
     
 
-    const handleAddFavorites = () => {
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user._id}/movies/${movie._id}`,
+    const handleAddFavorites = (event) => {
+        event.preventDefault();
+
+        const data = {
+            Movies: Movies
+        };
+
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`,
         {
             method: "POST",
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}`},
@@ -29,25 +27,24 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
         .then((res) => {
             if(res.ok) {
                 return res.json(); }})
-        .then((user) => {
+        .then((data) => {
             alert("You added a new movie to your list.");
             updateUserFavorites(movieId, "add");
-            //localStorage.setItem("user_movie", JSON.stringify(movie));
             setIsFavorite(true);
-            setUser(user);
+            setUser(data);
             window.location.reload();
     })
         
         .catch((error) => console.log(error));
     };
 
-
+    
 
     if (!movie) return null;
 
 
     return (
-        <Card className="movie-card card-wrap h-100 text-center" onClick={handleClick}>
+        <Card className="movie-card card-wrap h-100 text-center">
             <Card.Img className="img-fluid card-img-top" variant="top" src={movie.Image} />
             <Card.Body>
                 <Card.Title className="header-text">{movie.Title}</Card.Title>
@@ -60,8 +57,8 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
 
                 <Button
                     className="w-100"
-                    variant={isFavorite ? "danger" : "success"}
-                    onClick={isFavorite ? handleRemoveFavorites : handleAddFavorites}>Add</Button>
+                    variant={"success"}
+                    onClick={handleAddFavorites}>Add</Button>
                 </Card.Footer>
             </Card.Body>
         </Card>
@@ -70,8 +67,8 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
 
 MovieCard.propTypes = {
     movie: PropTypes.shape({
-        Title: PropTypes.string.isRequired,
+        Title: PropTypes.string,
         Description: PropTypes.string,
-        Image: PropTypes.string.isRequired,
+        Image: PropTypes.string,
     }).isRequired,
 };

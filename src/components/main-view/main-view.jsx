@@ -14,11 +14,11 @@ import "./main-view.scss";
 
 export const MainView = () => {
 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedUser = localStorage.getItem("user");
 
     const storedToken = localStorage.getItem("token");
 
-    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null);
 
     const [token, setToken] = useState(storedToken ? storedToken : null);
 
@@ -34,19 +34,18 @@ export const MainView = () => {
         localStorage.clear();
     };
 
-    // Verify that you are sending a request to your API to update the user
     const updateUserFavorites = (movieId, action) => {
         console.log(movies);
         console.log(user);
         if (action === "add") {
             setUser({ 
                 ...user, 
-                movie: [...user.Movies, movieId] });
+                Movies: [...user.Movies, movieId] });
         } else if (action === "remove") {
             setUser({
                 ...user,
-                movie: movies.filter((_id) => {
-                    return _id !== movieId;
+                Movies: movies.filter((id) => {
+                    return id !== movieId;
                 }),
             });
         }
@@ -63,6 +62,7 @@ useEffect(() => {
     .then((movies) => 
         setMovies(movies));
 }, [token]);
+
     return (
         <BrowserRouter>
         <NavigationBar 
