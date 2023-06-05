@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -38,6 +38,28 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
         .catch((error) => console.log(error));
     };
 
+    const handleRemoveFavorites = () => {
+
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+            .then((res) => {
+                if(res.ok) {
+                    res.json(); }})
+            .then((data) => {
+                alert('You removed a movie from your list.');
+                setIsFavorite(false);
+                updateUserFavorites(movieId, "remove");
+                setUser(data);
+                window.location.reload();
+            })
+            .catch((error) => console.log(error));
+
+    }; 
+
     
 
     if (!movie) return null;
@@ -59,6 +81,11 @@ export const MovieCard = ({ movie, user, setUser, updateUserFavorites }) => {
                     className="w-100"
                     variant={"success"}
                     onClick={handleAddFavorites}>Add</Button>
+
+                <Button
+                    className="w-100"
+                    variant={"danger"}
+                    onClick={handleRemoveFavorites}>Remove</Button>
                 </Card.Footer>
             </Card.Body>
         </Card>

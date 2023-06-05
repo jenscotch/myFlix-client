@@ -120,6 +120,7 @@ useEffect(() => {
                                     <ProfileView
                                         user={user}
                                         movies={movies}
+                                        
                                         setUser={setUser}
                                         onLoggedOut={onLoggedOut}
                                         updateUserFavorites={updateUserFavorites}

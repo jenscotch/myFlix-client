@@ -10,24 +10,29 @@ export const ProfileView = ({
     updateUserFavorites,
     
 }) => {
-    const [ Name, setName ] = useState(user.Name);
-    const [ Password, setPassword ] = useState('');
-    const [ Email, setEmail ] = useState(user.email);
-    const [ Birthday, setBirthday ] = useState('');
+    const [ Name, setName ] = useState("");
+    const [ Password, setPassword ] = useState("");
+    const [ Email, setEmail ] = useState("");
+    const [ Birthday, setBirthday ] = useState("");
     const [Movies, setFavorites] = useState([{}]);
     const navigate = useNavigate();
     const [showButton, setShowButton] = useState(false);
     const [hoverEnabled, setHoverEnabled] = useState(false);
-    const { movieId } = useParams();
-    
+
+    const data = {
+        Name: Name,
+        Password: Password,
+        Email: Email,
+        Birthday: Birthday
+    };
 
     const getFavoriteMovies = () => {
         console.log(user);
         fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
 })
         .then((res) => res.json())
@@ -38,100 +43,72 @@ export const ProfileView = ({
         .catch((e) => console.log(e));
 };
 
-useEffect(() => {
-    getFavoriteMovies();
-}, [user, movies]);
+    useEffect(() => {
+        getFavoriteMovies();
+    }, [user, movies]);
 
-useEffect(() => {
-    const detectHover = () => {
-        const hoverSupported = window.matchMedia('(hover: hover)').matches;
+    useEffect(() => {
+        const detectHover = () => {
+            const hoverSupported = window.matchMedia("(hover: hover)").matches;
         setHoverEnabled(hoverSupported);
     };
 
     detectHover();
-    window.addEventListener('resize', detectHover);
+    window.addEventListener("resize", detectHover);
 
     return () => {
-        window.removeEventListener('resize', detectHover);
+        window.removeEventListener("resize", detectHover);
     };
 }, []);
 
 
-const handleUpdate = (e) => {
-    e.preventDefault();
-    fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-            Name: Name,
-            Password: Password,
-            Email: Email,
-            Birthday: Birthday,
-        }),
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            alert('Profile has been updated.');
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(data),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                alert("Profile has been updated.");
            
-            setUser(data);
-        })
-        .catch((e) => console.log(e));
-};
-
-const handleDelete = () => {
-    const confirmDelete = window.confirm(
-        'Are you sure you would like to delete your profile?'
-    );
-
-    if(!confirmDelete) {
-        return;
-    }
-
-    fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-    })
-        .then((res) => res.text())
-        .then((data) => {
-            alert(data);
-            setUser(null);
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            navigate('/login');
-            onLoggedOut();
-        })
+                setUser(data);
+            })
         .catch((e) => console.log(e));
     };
 
-  
+    const handleDelete = () => {
+        const confirmDelete = window.confirm(
+            "Are you sure you would like to delete your profile?"
+        );
 
-    const handleRemoveFavorites = (event) => {
-        event.preventDefault();
+        if(!confirmDelete) {
+            return;
+        }
 
-
-        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}/movies/${movie._id}`, {
-            method: 'DELETE',
+        fetch(`https://jens-movie-api.herokuapp.com/users/${user.Name}`, {
+            method: "DELETE",
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
         })
-            .then((res) => {
-                if(res.ok) {
-                    res.json(); }})
+            .then((res) => res.text())
             .then((data) => {
-                alert("You removed a movie from your list.");
-                setFavorites(false);
-                updateUserFavorites(movieId, 'remove');
-                setUser(data);
-                window.location.reload();
+                alert(data);
+                setUser();
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                navigate("/login");
+                onLoggedOut();
             })
-            .catch((error) => console.log(error));
-    }; 
+            .catch((e) => console.log(e));
+        };
+
+
 
     return(
         <Container
@@ -162,7 +139,7 @@ const handleDelete = () => {
                 }`}
             </style>
             
-            <h1 className="text-center" style={{ textDecoration: 'bold' }}>
+            <h1 className="text-center" style={{ textDecoration: "bold" }}>
                 {user.Name}'s Profile
             </h1>
             <br></br>
@@ -172,8 +149,8 @@ const handleDelete = () => {
             <Row
                 className="justify-content-center"
                 style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
+                    display: "flex",
+                    flexWrap: "wrap",
                 }}
             >
                 {Movies.length > 0 ? (
@@ -184,20 +161,20 @@ const handleDelete = () => {
                                 xs={3} sm={3} md={3} lg={3}
                                 className="d-flex justify-content-center mb-4"
                                 style={{
-                                    position: 'relative',
-                                    minHeight: '400px',
-                                    minWidth: '300px',
-                                    margin: '5px',
+                                    position: "relative",
+                                    minHeight: "400px",
+                                    minWidth: "300px",
+                                    margin: "5px",
                                 }}
                             >
                                 <div
                                     style={{
-                                        position: 'relative',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: '100%',
-                                        minWidth: '150px',
-                                        maxWidth: '1000px',
+                                        position: "relative",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        height: "100%",
+                                        minWidth: "150px",
+                                        maxWidth: "1000px",
                                     }}
                                     onMouseEnter={() => {
                                         if (hoverEnabled) {
@@ -220,7 +197,11 @@ const handleDelete = () => {
                                         </Card.Body>
                                         </Card>
                                     </div>
-                                    <Button variant="danger"
+                                    <Button
+                                        className="w-100"
+                                        variant="primary" 
+                                        href={`/movies/${encodeURIComponent(movie._id)}`}>Open</Button>
+                                    {/*<Button variant="danger"
                                         syle={{
                                             position: 'absolute',
                                             bottom: 0,
@@ -237,7 +218,7 @@ const handleDelete = () => {
                                         onClick={handleRemoveFavorites}
                                     >
                                         Remove
-                                    </Button>
+                                    </Button>*/}
                                 </div>
                             </Col>
                         ))
@@ -248,16 +229,16 @@ const handleDelete = () => {
             <Form
                 className="profile-form"
                 style={{
-                    width: '25%',
-                    display: 'flex',
-                    flexDirection: 'column',
+                    width: "25%",
+                    display: "flex",
+                    flexDirection: "column",
                 }}
             > 
                 <br></br>
                 <h4 className="text-center">Update Profile</h4>
                 <Form.Group
                     controlId="formUsername"
-                    style={{ padding: '10px', width: '100%' }}
+                    style={{ padding: "10px", width: "100%" }}
                 >
                     <Form.Label>Name:</Form.Label>
                     <Form.Control
@@ -271,13 +252,13 @@ const handleDelete = () => {
 
                 <Form.Group
                     controlId="formPassword"
-                    style={{ padding: '5px', width: '100%' }}
+                    style={{ padding: "5px", width: "100%" }}
                 >
                     <Form.Label>Password:</Form.Label>
                     <Form.Control
                         className="text-light"
                         type="password"
-                        placeholder="Enter new password"
+                        placeholder="Password is required"
                         value={Password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -285,7 +266,7 @@ const handleDelete = () => {
 
                 <Form.Group
                     controlId="formEmail"
-                    style={{ padding: '5px', width: '100%' }}
+                    style={{ padding: "5px", width: "100%" }}
                 >
                     <Form.Label>Email:</Form.Label>
                     <Form.Control
@@ -299,7 +280,7 @@ const handleDelete = () => {
 
                 <Form.Group
                     controlId="formBirthday"
-                    style={{ padding: '5px', width: '100% '}}
+                    style={{ padding: "5px", width: "100%" }}
                 >
                     <Form.Label>Birthday:</Form.Label>
                     <Form.Control
@@ -314,8 +295,8 @@ const handleDelete = () => {
                     variant="primary"
                     type="submit"
                     style={{
-                        display: 'flex',
-                        justifyContent: 'center',
+                        display: "flex",
+                        justifyContent: "center",
                     }}
                     onClick={handleUpdate}
                 >Update</Button>
