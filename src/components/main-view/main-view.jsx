@@ -84,7 +84,7 @@ useEffect(() => {
                     element={
                         <>
                         {user ? (
-                            <Navigate to="/" />
+                            <Navigate to="/login" />
                         ) : (
                             <Col md={5}>
                                 <SignupView />
@@ -98,7 +98,7 @@ useEffect(() => {
                     element={
                         <>
                             {user ? (
-                                <Navigate to="/movies" />
+                                <Navigate to="/" />
                             ) : (
                                 <Col md={5}>
                                     <LoginView onLoggedIn={(user, token) => {

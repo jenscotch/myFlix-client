@@ -12,7 +12,7 @@ export const HomeView = () => {
             <Button 
             variant="primary"
             className="home-button"
-            href={`/login`}
+            href={`/movies`}
             >
             Start Browsing
             </Button> 
