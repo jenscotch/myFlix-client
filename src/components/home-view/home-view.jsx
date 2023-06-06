@@ -7,8 +7,8 @@ export const HomeView = () => {
     return (
         <Container className="vertical-center">
             <h1 className="neon">Jen's Flix</h1>
-            <p className="p">THE ULTIMATE GUIDE TO JEN'S FAVORITE MOVIES</p>
-            <p className="p2">How many favorite movies do you and Jen have in common?</p>
+            <h2 className="p">THE ULTIMATE GUIDE TO JEN'S FAVORITE MOVIES</h2>
+            <h3 className="p2">How many favorite movies do you have in common?</h3>
             <Button 
             variant="primary"
             className="home-button"
