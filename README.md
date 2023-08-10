@@ -3,9 +3,9 @@ https://jensmovieapp.netlify.app/
  
 # Project Objective:
 Using React, build the client-side for an app called myFlix based on its
-existing server-side code (REST API and database).
+existing server-side code (REST API and database), using the MERN stack.
 
-# Libraries Utilized:
+# Technologies Utilized:
 JavaScript, React, SASS, HTML
 
 # UI Library:
